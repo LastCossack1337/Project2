@@ -6,6 +6,25 @@ import pyspark.sql.types as T
 from pyspark.ml.feature import Tokenizer, HashingTF, IDF
 from pyspark.ml.classification import LogisticRegression
 
+# Build a spark context
+hc = (SparkSession.builder
+                  .appName('Toxic Comment Classification')
+                  .enableHiveSupport()
+                  .config("spark.executor.memory", "4G")
+                  .config("spark.driver.memory","18G")
+                  .config("spark.executor.cores","7")
+                  .config("spark.python.worker.memory","4G")
+                  .config("spark.driver.maxResultSize","0")
+                  .config("spark.sql.crossJoin.enabled", "true")
+                  .config("spark.serializer","org.apache.spark.serializer.KryoSerializer")
+                  .config("spark.default.parallelism","2")
+                  .getOrCreate())
+
+hc.sparkContext.setLogLevel('INFO')
+
+hc.version
+
+
 def to_spark_df(fin):
     df = pd.read_csv(fin)
     df.fillna("", inplace=True)
@@ -15,8 +34,8 @@ def to_spark_df(fin):
     # Load the train-test sets
 
 
-train = to_spark_df("../input/train.csv")  #TODO Add the file address here
-test = to_spark_df("../input/test.csv")    #TODO Add the file address here
+train = to_spark_df('C:\\Users\\Stan the man\\train.csv')
+test = to_spark_df('C:\\Users\\Stan the man\\test.csv')
 
 out_cols = [i for i in train.columns if i not in ["id", "comment_text"]]
 
@@ -91,3 +110,4 @@ for col in out_cols:
 test_res.show(5)
 
 test_res.coalesce(1).write.csv('./results/spark_lr.csv', mode='overwrite', header=True)
+
