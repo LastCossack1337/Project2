@@ -34,8 +34,8 @@ def to_spark_df(fin):
     # Load the train-test sets
 
 
-train = to_spark_df('C:\\Users\\Stan the man\\train.csv')
-test = to_spark_df('C:\\Users\\Stan the man\\test.csv')
+train = to_spark_df('C:\\Users\\Stan the man\\train.csv')   #This needs to be changed to where file is located.
+test = to_spark_df('C:\\Users\\Stan the man\\test.csv')     #This needs to be changed to where file is located.
 
 out_cols = [i for i in train.columns if i not in ["id", "comment_text"]]
 
